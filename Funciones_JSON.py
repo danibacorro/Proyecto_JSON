@@ -16,27 +16,42 @@ def menu():
 4. Filtrar contratos por año.
 5. Mostrar información de los contratos subvencionados.
 6. Salir.''')
-        opcion = int(input("\n: "))
+        try:
+            opcion = int(input("\n: "))
         
-        if opcion == 1:
-            mostrar_info(datos)
-        elif opcion == 2:
-            año = int(input("\nIngrese el año: "))
-            contar_contratos(datos, año)
-        elif opcion == 3:
-            print("\n","*"*30)
-            valor = float(input("Ingrese el valor mínimo del contrato(€): "))
-            buscar_por_valor(datos, valor)
-        elif opcion == 4:
-            año = int(input("\nIngrese el año: "))
-            filtrar_por_año(datos, año)
-        elif opcion == 5:
-            subvencionados(datos)
-        elif opcion == 6:
-            print("\nSaliendo del programa...\n¡Hasta pronto!\n")
-            activo = False
-        else:
-            print("Opción no válida. Intente nuevamente.")
+            if opcion == 1:
+                mostrar_info(datos)
+            elif opcion == 2:
+                año = int(input("\nIngrese el año: "))
+                contar_contratos(datos, año)
+            elif opcion == 3:
+                try:
+                    print("\n","*"*30)
+                    valor = float(input("Ingrese el valor mínimo del contrato(€): "))
+                    if valor < 0:
+                        print("\nEl valor ha de ser positivo.")
+                    else:    
+                        buscar_por_valor(datos, valor)
+                except ValueError:
+                    print("\nSe ha producido un error, debes introducir un número.")
+            elif opcion == 4:
+                try:
+                    año = int(input("\nIngrese el año: "))
+                    if año <= 2013 or año >= 2025:
+                        print("\nNo se han encontrado contratos.")
+                    else:
+                        filtrar_por_año(datos, año)
+                except ValueError:
+                    print("\nSe ha producido un error, debes introducir un número.")
+            elif opcion == 5:
+                subvencionados(datos)
+            elif opcion == 6:
+                print("\nSaliendo del programa...\n¡Hasta pronto!\n")
+                activo = False
+            else:
+                print("\nOpción no válida. Intente nuevamente.")
+        except ValueError:
+            print("\nOpción no válida. Intente nuevamente.")
 
 def mostrar_info(datos):
     print("\nID\t Año\t Cuatrimestre")
