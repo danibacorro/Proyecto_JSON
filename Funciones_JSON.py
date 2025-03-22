@@ -26,14 +26,13 @@ def menu():
                 contar_contratos(datos, año)
             elif opcion == 3:
                 try:
-                    print("\n","*"*30)
-                    valor = float(input("Ingrese el valor mínimo del contrato(€): "))
+                    valor = float(input("\nIngrese el valor mínimo del contrato(€): "))
                     if valor < 0:
                         print("\nEl valor ha de ser positivo.")
                     else:    
                         buscar_por_valor(datos, valor)
                 except ValueError:
-                    print("\nSe ha producido un error, debes introducir un número.")
+                    print("\nSe ha producido un error, debes introducir un número entero.")
             elif opcion == 4:
                 try:
                     año = int(input("\nIngrese el año: "))
@@ -42,7 +41,7 @@ def menu():
                     else:
                         filtrar_por_año(datos, año)
                 except ValueError:
-                    print("\nSe ha producido un error, debes introducir un número.")
+                    print("\nSe ha producido un error, debes introducir un número entero.")
             elif opcion == 5:
                 subvencionados(datos)
             elif opcion == 6:
@@ -76,7 +75,7 @@ def contar_contratos(datos, año):
 
 def buscar_por_valor(datos, valor):
     listado = set()
-    print("\nOrganismo/s con contratos superiores al indicado:\n")
+    print("\033[4;37m"+"\nOrganismo/s con contratos superiores al valor indicado:\n"+"\033[0;37m")
     for contrato in datos:
         for nombre in contrato.get("contract", []):
             if nombre.get("contract_amount") and float(nombre["contract_amount"]) > valor:
@@ -90,17 +89,19 @@ def buscar_por_valor(datos, valor):
         print("No se han encontrado organismos con contratos de valor superior al indicado.")
 
 def filtrar_por_año(datos, año):
+    print("\nLos datos se mostrarán en el siguiente orden:\nID - Empresa - Contrato")
     for contrato in datos:
         for periodo in contrato.get("period", []):
             if int(periodo.get("year")) == año:
                 for contrato_info in contrato.get("contract", []):
-                    print("\nID:", contrato['id'], "\tEmpresa:", contrato_info.get('contract_purchaser') or 'Sin especificar', "\nContrato:", contrato_info.get('contract_name') or 'Sin especificar')
+                    print("\n", "\033[33m"+contrato['id']+"\033[37m", " - ", contrato_info.get('contract_purchaser') or 'Sin especificar', " - ", contrato_info.get('contract_name') or 'Sin especificar')
 
 def subvencionados(datos):
     total = 0
+    print("\nA continuación se van a listar los contratos subvencionados con el siguiente formato:\nID:\nContrato:\nBeneficiario:")
     for contrato in datos:
         for grant in contrato.get("grant", []):
             if grant.get("grant_name") and grant.get("grant_beneficiary"):
-                print("\nID:", contrato['id'], "\nNombre:", grant['grant_name'], "\nBeneficiario:", grant['grant_beneficiary'])
+                print("\n", "\033[33m"+contrato['id']+"\033[37m", "\n", grant['grant_name'], "\n", grant['grant_beneficiary'])
                 total +=1
-    print("\nTotal de contratos subvencionados: ", total)
+    print("\n", "\033[4;37m"+"Total de contratos subvencionados:"+"\033[0;37m", total)
