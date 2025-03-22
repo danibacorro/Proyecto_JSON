@@ -48,9 +48,9 @@ def menu():
                 print("\nSaliendo del programa...\n¡Hasta pronto!\n")
                 activo = False
             else:
-                print("\nOpción no válida. Intente nuevamente.")
+                print("\nValor no válido. Inténtalo de nuevo.")
         except ValueError:
-            print("\nOpción no válida. Intente nuevamente.")
+            print("\nValor no válido. Inténtalo nuevo.")
 
 def mostrar_info(datos):
     print("\nID\t Año\t Cuatrimestre")
