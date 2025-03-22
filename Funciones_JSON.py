@@ -16,44 +16,29 @@ def menu():
 4. Filtrar contratos por año.
 5. Mostrar información de los contratos subvencionados.
 6. Salir.''')
-        try:
-            opcion = int(input("\n: "))
+        opcion = int(input("\n: "))
         
-            if opcion == 1:
-                contratos_empresa_turismo(datos)
-            elif opcion == 2:
-                año = int(input("\nIngrese el año: "))
-                contar_contratos(datos, año)
-            elif opcion == 3:
-                try:
-                    print("\n","*"*30)
-                    valor = float(input("Ingrese el valor mínimo del contrato(€): "))
-                    if valor < 0:
-                        print("\nEl valor ha de ser positivo.")
-                    else:    
-                        contratos_por_valor(datos, valor)
-                except ValueError:
-                    print("\nSe ha producido un error, debes introducir un número.")
-            elif opcion == 4:
-                try:
-                    año = int(input("\nIngrese el año: "))
-                    if año <= 2013 or año >= 2025:
-                        print("\nNo se han encontrado contratos.")
-                    else:
-                        contratos_por_año(datos, año)
-                except ValueError:
-                    print("\nSe ha producido un error, debes introducir un número.")
-            elif opcion == 5:
-                contratos_subvencionados(datos)
-            elif opcion == 6:
-                print("\nSaliendo del programa...\n¡Hasta pronto!\n")
-                activo = False
-            else:
-                print("\nOpción no válida. Intente nuevamente.")
-        except ValueError:
-            print("\nOpción no válida. Intente nuevamente.")
+        if opcion == 1:
+            mostrar_info(datos)
+        elif opcion == 2:
+            año = int(input("\nIngrese el año: "))
+            contar_contratos(datos, año)
+        elif opcion == 3:
+            print("\n","*"*30)
+            valor = float(input("Ingrese el valor mínimo del contrato(€): "))
+            buscar_por_valor(datos, valor)
+        elif opcion == 4:
+            año = int(input("\nIngrese el año: "))
+            filtrar_por_año(datos, año)
+        elif opcion == 5:
+            subvencionados(datos)
+        elif opcion == 6:
+            print("\nSaliendo del programa...\n¡Hasta pronto!\n")
+            activo = False
+        else:
+            print("Opción no válida. Intente nuevamente.")
 
-def contratos_empresa_turismo(datos):
+def mostrar_info(datos):
     print("\nID\t Año\t Cuatrimestre")
     print("-"*38)
     for contrato in datos:
@@ -74,7 +59,7 @@ def contar_contratos(datos, año):
     for cuatrimestre, cantidad in cuatrimestres.items():
         print(cuatrimestre, "\t   ", str(cantidad))
 
-def contratos_por_valor(datos, valor):
+def buscar_por_valor(datos, valor):
     listado = set()
     print("\nOrganismo/s con contratos superiores al indicado:\n")
     for contrato in datos:
@@ -89,14 +74,14 @@ def contratos_por_valor(datos, valor):
     else:
         print("No se han encontrado organismos con contratos de valor superior al indicado.")
 
-def contratos_por_año(datos, año):
+def filtrar_por_año(datos, año):
     for contrato in datos:
         for periodo in contrato.get("period", []):
             if int(periodo.get("year")) == año:
                 for contrato_info in contrato.get("contract", []):
                     print("\nID:", contrato['id'], "\tEmpresa:", contrato_info.get('contract_purchaser') or 'Sin especificar', "\nContrato:", contrato_info.get('contract_name') or 'Sin especificar')
 
-def contratos_subvencionados(datos):
+def subvencionados(datos):
     total = 0
     for contrato in datos:
         for grant in contrato.get("grant", []):
