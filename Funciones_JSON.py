@@ -50,7 +50,7 @@ def menu():
             else:
                 print("\nValor no válido. Inténtalo de nuevo.")
         except ValueError:
-            print("\nValor no válido. Inténtalo nuevo.")
+            print("\nValor no válido. Inténtalo de nuevo.")
 
 def mostrar_info(datos):
     print("\nID\t Año\t Cuatrimestre")
